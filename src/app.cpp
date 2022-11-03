@@ -3,21 +3,17 @@
 
 int main(int argc, char const *argv[]) {
  
-
     Server mg;
 
     mg.create();
     mg.setPort(8080);
-    mg.setBuffer(2048);
-    mg.setSessions(1);
-
+    mg.setSessions(3);
+    mg.setBuffer(5000);
 
 
     mg.on();
-   
+
     std::cout <<  mg.getResponse();
-
-
 
     mg.close();
 
