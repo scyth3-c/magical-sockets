@@ -1,14 +1,14 @@
-DIR_BIN := ./build
-TARGET := $(DIR_BIN)/mgsockets
+DIR_BIN := ./$(route)
+TARGET := $(DIR_BIN)/app
 
 
 DIR_OBJ := $(DIR_BIN)/objects
 
-INCLUDE := ./mg
+INCLUDE := ./magical
 SOURCE_BIN := ./src
 COMPILER := g++
 FLAGS := -std=c++17 -pthread -I$(INCLUDE) -g -fsanitize=address
-OBJ := $(DIR_OBJ)/$(file).o $(DIR_OBJ)/mgsocket.o
+OBJ := $(DIR_OBJ)/$(file).o $(DIR_OBJ)/mgsockets.o
 
 $(TARGET) : $(OBJ)
 	@mkdir -p $(DIR_BIN)
