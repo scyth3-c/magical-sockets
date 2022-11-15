@@ -1,4 +1,4 @@
-# Magical-sockets
+# Magical Sockets
 
 controla y usa los sockets con facilidad, captura o lanza peticiones a direcciones IP o en localhost!  transmite informacion con facilidad por la red
 
