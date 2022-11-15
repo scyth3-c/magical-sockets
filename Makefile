@@ -7,7 +7,7 @@ DIR_OBJ := $(DIR_BIN)/objects
 INCLUDE := ./magical
 SOURCE_BIN := ./src
 COMPILER := g++
-FLAGS := -std=c++17 -pthread -I$(INCLUDE) -g -fsanitize=address
+FLAGS := -std=c++17 -pthread -I$(INCLUDE) # -g -fsanitize=address
 OBJ := $(DIR_OBJ)/$(file).o $(DIR_OBJ)/mgsockets.o
 
 $(TARGET) : $(OBJ)
