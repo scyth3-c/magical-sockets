@@ -1,6 +1,10 @@
 # Magical-sockets
 
-small high level sockets for linux
+controla y usa los sockets con facilidad, captura o lanza peticiones a direcciones IP o en localhost!  transmite informacion con facilidad por la red
+
+<hr/>
+
+control and use sockets with ease, capture or launch requests to IP addresses or localhost! transmit information with ease over the network
 
 ![example](https://user-images.githubusercontent.com/52190352/201794656-4da648f1-87ff-42c7-a22d-3c2d2ee235f8.png)
 
