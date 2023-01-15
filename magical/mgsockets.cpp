@@ -101,7 +101,7 @@ int Engine::getHeapLimit() {
 
 int Engine::getPort() {
      try {
-          if (*PORT >= 0)  {
+          if (*PORT == 0)  {
                return *PORT;
           }
           else {
@@ -150,7 +150,7 @@ void Server::setSessions(int max) {
 
 
 
-int Server::on(function<void(string* clust)>optional) {
+int Server::on(function<void(string*)>optional) {
      try {
           if (setsockopt(*socket_id,
                          SOL_SOCKET,
@@ -190,29 +190,27 @@ int Server::on(function<void(string* clust)>optional) {
 
 
 
-string Server::getResponseProcessing() {
-     char _A = '?';
-     char *forbiden = &_A;
+void Server::getResponseProcessing() {
      try {
-
           string receptor{""};
           vector<char> buffer = {'1'};
           buffer.reserve(*buffer_size);
           read(*new_socket, buffer.data(), *buffer_size);
 
-          for (int it = 0; it <= *buffer_size - (*heap_limit); it++) {
+          for (int it = 0; it <= *buffer_size-(*heap_limit); it++) {
                if (int(buffer[it] == UnCATCH_ERROR_CH))
                     continue;
                receptor += buffer[it];
           }
-          if(receptor.empty() || receptor == " ") throw std::range_error("error, el mensaje no se recibio");
+          if(receptor.empty()) throw std::range_error("error, el mensaje no se recibio");
           buffereOd_data = make_shared<string>(receptor);
-          return receptor;
+          fflush(stdin);
+          fflush(stdout);
      }
      catch (const std::exception &e) {
           std::cerr << e.what() << '\n';
-          return forbiden;
      }
+         
 }
 
 
@@ -220,7 +218,7 @@ string Server::getResponseProcessing() {
 void Server::sendResponse(string _msg) {
      char* conten = (char *)_msg.c_str();
      try {
-          if(conten == " " || conten == "") throw std::range_error("erro al obtener la respuesta");
+          if(strlen(conten) == 0) throw std::range_error("erro al obtener la respuesta");
           send(*new_socket, conten, _msg.size(), 0);
      }
      catch (const std::exception &e) {
@@ -228,12 +226,7 @@ void Server::sendResponse(string _msg) {
      }
 }
 
-
-string Client::getResponseProcessing() {
-     char _A = '?';
-     char *forbiden = &_A;
-
-     try {
+void Client::getResponseProcessing() {
           string receptor{""};
           vector<char> buffer = {'1'};
           buffer.reserve(*buffer_size);
@@ -244,24 +237,18 @@ string Client::getResponseProcessing() {
                     continue;
                receptor += buffer[it];
           }
-          if(receptor.empty() || receptor == " ") throw std::range_error("error, el mensaje no se recibio");
+          if(receptor.empty()) throw std::range_error("error, el mensaje no se recibio");
           buffereOd_data = make_shared<string>(receptor);
-          return receptor;
-     }
-     catch (const std::exception &e) {
-          std::cerr << e.what() << '\n';
-          return forbiden;
-     }
 }
 
 
-int Client::on(function<void(string* clust)>optional) {
+int Client::on(function<void(string*)>optional) {
      try {
           address.sin_family = AF_INET;
           address.sin_port = htons(*PORT);
           char *IP =  (char *)IP_ADDRRESS->c_str();
 
-          if (inet_pton(AF_INET, "127.0.0.1" , &address.sin_addr) <= 0) {
+          if (inet_pton(AF_INET, IP, &address.sin_addr) <= 0) {
                return MG_ERROR; // throw "error, invalid address";
           }
 
