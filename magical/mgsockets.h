@@ -70,9 +70,11 @@ class Engine {
              getHeapLimit(),
              setPort(uint16_t),
              getPort();
+
+          void* _cache;
         
-        virtual string getResponseProcessing() = 0;
-        virtual int on(function<void(string*)>optional = [](string* clust)->void{}) = 0;
+        virtual void getResponseProcessing() = 0;
+        virtual int on(function<void(string*)>optional = [](string*)->void{}) = 0;
         virtual int Close() = 0;
         virtual string getResponse() const = 0;
 };
@@ -94,12 +96,12 @@ class Server : public Engine {
      Server() : Engine(DEFAULT_PORT){}
      ~Server(){}
 
-     int on(function<void(string* clust)>optional = [](string* clust)->void{});
+     int on(function<void(string* clust)>optional = [](string*)->void{});
      int Close();
      void setSessions(int);
      void sendResponse(string);
-     string getResponseProcessing();
-     inline string getResponse() const { return  *buffereOd_data; }
+     void getResponseProcessing();
+     inline string getResponse() const {std::string base = *buffereOd_data;  return base;  }
 };
 
 
@@ -120,11 +122,11 @@ class Client : public Engine {
           Client() : Engine(DEFAULT_PORT){}
           ~Client(){}
 
-     int on(function<void(string*)>optional = [](string* clust)->void{});
+     int on(function<void(string*)>optional = [](string*)->void{});
      int Close();
      void setMessage(string);
      void setIP(string ip = LOCALHOST);
-     string getResponseProcessing();
+     void getResponseProcessing();
      inline string getResponse() const { return  *buffereOd_data; }
 };
 
@@ -164,9 +166,9 @@ struct WEB {
 };
 
 template<class...P>
-struct Headers_t {
-    Headers_t(){}
-    Headers_t(std::initializer_list<P...>list): body(list) {}
+struct HEADERS_MG {
+    HEADERS_MG(){}
+    HEADERS_MG(std::initializer_list<P...>list): body(list) {}
     vector<string> body;
     string generate(){
         string response{""};
@@ -177,7 +179,7 @@ struct Headers_t {
     }
 };  
 
-typedef Headers_t<string> HEADERS;
+typedef HEADERS_MG<string> Headers;
 
 
 constexpr auto HTTP_ERROR = "HTTP/1.1 400 BAD\n"
