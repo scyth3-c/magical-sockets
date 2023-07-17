@@ -66,8 +66,6 @@ class Engine {
         int create();
         int 
              setBuffer(int),
-             setHeapLimit(int),
-             getHeapLimit(),
              setPort(uint16_t),
              getPort();
 
@@ -96,12 +94,12 @@ class Server : public Engine {
      Server() : Engine(DEFAULT_PORT){}
      ~Server(){}
 
-     int on(function<void(string* clust)>optional = [](string*)->void{});
-     int Close();
+     int on(function<void(string* clust)>optional = [](string*)->void{}) override;
+     int Close() override;
      void setSessions(int);
      void sendResponse(string);
-     void getResponseProcessing();
-     inline string getResponse() const {std::string base = *buffereOd_data;  return base;  }
+     void getResponseProcessing() override;
+     inline string getResponse() const override {std::string base = *buffereOd_data;  return base;  }
 };
 
 
@@ -122,12 +120,12 @@ class Client : public Engine {
           Client() : Engine(DEFAULT_PORT){}
           ~Client(){}
 
-     int on(function<void(string*)>optional = [](string*)->void{});
-     int Close();
+     int on(function<void(string*)>optional = [](string*)->void{}) override;
+     int Close() override;
      void setMessage(string);
      void setIP(string ip = LOCALHOST);
-     void getResponseProcessing();
-     inline string getResponse() const { return  *buffereOd_data; }
+     void getResponseProcessing() override;
+     inline string getResponse() const  override { return  *buffereOd_data; }
 };
 
 
